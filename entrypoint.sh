@@ -15,7 +15,14 @@ if [ ! -e $image_path ]; then
   fi
 fi
 
-if [ "${target}" = "pi1" ]; then
+if [ "${target}" = "pi0" ]; then
+  emulator=qemu-system-arm
+  machine=raspi0
+  memory=512m
+  kernel_pattern=kernel.img
+  dtb_pattern=bcm2708-rpi-zero.dtb
+  nic=''
+elif [ "${target}" = "pi1" ]; then
   emulator=qemu-system-arm
   kernel="/root/qemu-rpi-kernel/kernel-qemu-4.19.50-buster"
   dtb="/root/qemu-rpi-kernel/versatile-pb.dtb"
@@ -47,7 +54,7 @@ if [ "${kernel_pattern}" ] && [ "${dtb_pattern}" ]; then
   fat_path="/fat.img"
   echo "Extracting partitions"
   fdisk -l ${image_path} \
-    | awk "/^[^ ]*1/{print \"dd if=${image_path} of=${fat_path} bs=512 skip=\"\$4\" count=\"\$6}" \
+    | awk "/^[^ ]*img1/{print \"dd if=${image_path} of=${fat_path} bs=512 skip=\"\$4\" count=\"\$6}" \
     | sh
 
   echo "Extracting boot filesystem"
