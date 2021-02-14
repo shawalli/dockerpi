@@ -17,11 +17,13 @@ fi
 
 if [ "${target}" = "pi0" ]; then
   emulator=qemu-system-arm
-  machine=raspi0
-  memory=512m
-  kernel_pattern=kernel.img
-  dtb_pattern=bcm2708-rpi-zero.dtb
-  nic=''
+  kernel="/root/qemu-rpi-kernel/kernel-qemu-4.19.50-buster"
+  dtb="/root/qemu-rpi-kernel/versatile-pb.dtb"
+  machine=versatilepb
+  memory=256m
+  root=/dev/sda2
+  nic='--net nic --net user,hostfwd=tcp::5022-:22'
+
 elif [ "${target}" = "pi1" ]; then
   emulator=qemu-system-arm
   kernel="/root/qemu-rpi-kernel/kernel-qemu-4.19.50-buster"
